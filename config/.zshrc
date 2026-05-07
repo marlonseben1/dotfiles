@@ -15,9 +15,9 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 
-# ---- DECOMPOSE CHAVE ACESSO ----#|
+# ---- DECOMPOSE CHAVE ACESSO ----#
 
-parse_dfe_key() {
+decompose_chave() {
     local chave="$1"
 
     if [[ ! $chave =~ ^[0-9]{44}$ ]]; then
@@ -63,12 +63,39 @@ parse_dfe_key() {
     echo "------------------------------"
 }
 
+# ---- GET CHAVE ACESSO ----#
+
+get_chave() {
+    local file="$1"
+    if [[ -z "$file" || ! -f "$file" ]]; then
+        echo "Uso: get_chave <arquivo.xml>"
+        return 1
+    fi
+    local chave
+    chave=$(grep -oP '<inf(?:NFe|CTe|MDFe)\b[^>]*Id="[A-Za-z]+\K[0-9]{44}' "$file")
+    if [[ -z "$chave" ]]; then
+        echo "Chave de acesso não encontrada."
+        return 1
+    fi
+    local mod="${chave:20:2}"
+    local doc_name
+    case $mod in
+        55) doc_name="NF-e" ;;
+        57) doc_name="CT-e" ;;
+        58) doc_name="MDF-e" ;;
+        *)  doc_name="Desconhecido" ;;
+    esac
+    echo "$doc_name: $chave"
+}
+
 #-------------ALIASES-------------#|
 alias ag='antigravity'			  #|
+alias ws='windsurf'               #|
+alias c="claude"                  #|
 #---------------------------------#|
 alias gpl='git pull'              #|
-alias gs='git status'             #|
 alias gc='git checkout'           #|
+alias gs='git status'             #|
 alias gcs='git checkout staging'  #|
 alias gcst='git checkout stable'  #|
 alias gcb='git checkout -b'       #|
@@ -83,6 +110,18 @@ alias pi='pnpm install'           #|
 alias ptb='pnpm tsc --build'      #|
 alias pdev='pnpm run dev'         #|
 #---------------------------------#|
-alias killport='fuser -k'         #|  
+alias ba='bun add'                #|
+alias bi='bun install'            #|
+alias bdev='bun run dev'          #|
+#---------------------------------#|
+alias killport≃'fuser -k'         #|  
 #---------------END---------------#|
 
+export PATH="$HOME/.local/bin:$PATH"
+
+# bun completions
+[ -s "/home/marlonseben/.bun/_bun" ] && source "/home/marlonseben/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
