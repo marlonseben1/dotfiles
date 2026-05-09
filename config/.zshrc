@@ -88,6 +88,40 @@ get_chave() {
     echo "$doc_name: $chave"
 }
 
+# ---- SYNC WORK ACTIVITY LOG ----#
+
+sync() {
+    local SINCE=$(date '+%Y-%m-%dT07:00:00')
+    local UNTIL=$(date '+%Y-%m-%dT18:00:00')
+
+    cd ~/Projetos/simplescte
+    git fetch --all -q
+
+    local NEW_DATES=$(git log --all --format="%aI" \
+      --after="$SINCE" --before="$UNTIL" \
+      --author="marlonseben1@gmail.com" \
+      --author="marlon@sbsistemas.com.br" \
+      | sort -u)
+
+    cd ~/Projetos/work-activity-log
+    local EXISTING=$(git log --format="%aI" | sort -u)
+
+    local TO_CREATE=$(comm -23 <(echo "$NEW_DATES") <(echo "$EXISTING"))
+
+    if [[ -z "$TO_CREATE" ]]; then
+        echo "Nenhum commit novo hoje."
+        return 0
+    fi
+
+    echo "$TO_CREATE" | while read d; do
+        GIT_AUTHOR_DATE="$d" GIT_COMMITTER_DATE="$d" \
+            git commit --allow-empty -m "feat: digital logistics contribution" --no-gpg-sign
+    done
+
+    git push
+    echo "Done: $(echo "$TO_CREATE" | wc -l) commits adicionados."
+}
+
 #-------------ALIASES-------------#|
 alias ag='antigravity'			  #|
 alias ws='windsurf'               #|
@@ -114,7 +148,7 @@ alias ba='bun add'                #|
 alias bi='bun install'            #|
 alias bdev='bun run dev'          #|
 #---------------------------------#|
-alias killport≃'fuser -k'         #|  
+alias killport≃'fuser -k'         #|
 #---------------END---------------#|
 
 export PATH="$HOME/.local/bin:$PATH"
