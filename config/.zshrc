@@ -91,8 +91,9 @@ get_chave() {
 # ---- SYNC WORK ACTIVITY LOG ----#
 
 sync() {
-    local SINCE=$(date '+%Y-%m-%dT07:00:00')
-    local UNTIL=$(date '+%Y-%m-%dT18:00:00')
+    local DATE="${1:-$(date '+%Y-%m-%d')}"
+    local SINCE="${DATE}T07:00:00"
+    local UNTIL="${DATE}T23:59:59"
 
     cd ~/Projetos/simplescte
     git fetch --all -q
@@ -109,7 +110,7 @@ sync() {
     local TO_CREATE=$(comm -23 <(echo "$NEW_DATES") <(echo "$EXISTING"))
 
     if [[ -z "$TO_CREATE" ]]; then
-        echo "Nenhum commit novo hoje."
+        echo "Nenhum commit novo para $DATE."
         return 0
     fi
 
