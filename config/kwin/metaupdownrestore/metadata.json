@@ -1,0 +1,12 @@
+{
+    "KPackageStructure": "KWin/Script",
+    "KPlugin": {
+        "Authors": [{ "Name": "marlon" }],
+        "Description": "Meta+Up restaura a ultima janela minimizada com Meta+Down; se nao houver nenhuma pendente, maximiza a janela ativa normalmente.",
+        "Icon": "preferences-system-windows-script-test",
+        "Id": "metaupdownrestore",
+        "License": "MIT",
+        "Name": "Meta+Up/Down Restore"
+    },
+    "X-Plasma-API": "javascript"
+}

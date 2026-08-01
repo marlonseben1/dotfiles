@@ -1,72 +1,114 @@
 {
-  "terminal.integrated.defaultProfile.linux": "zsh",
-  "terminal.integrated.profiles.linux": {
-    "zsh": {
-      "path": "/usr/bin/zsh"
-    }
-  },
-  "workbench.colorTheme": "One Dark Pro Night Flat",
-  "editor.fontFamily": "JetBrains Mono, monospace",
-  "editor.autoSurround": "brackets",
-  "editor.autoClosingBrackets": "always",
-  "editor.fontLigatures": true,
-  "editor.linkedEditing": true,
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "git.autofetch": true,
-  "workbench.iconTheme": "material-icon-theme",
-  "window.commandCenter": false,
-  "editor.codeActionsOnSave": {
-    "source.organizeImports.biome": "explicit",
-    "source.fixAll.biome": "explicit",
-    "source.removeUnusedImports": "explicit"
-  },
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "diffEditor.renderSideBySide": true,
-  "[typescript]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "editor.cursorStyle": "line-thin",
-  "editor.fontSize": 16,
-  "window.menuBarVisibility": "compact",
-  "gitlens.ai.model": "gitkraken",
-  "gitlens.ai.vscode.model": "copilot:gpt-4.1",
-  "[jsonc]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-  },
-  "vim.useCtrlKeys": true,
-  "vim.insertModeKeyBindings": [
-    {
-      "before": [
-        "j",
-        "k"
-      ],
-      "after": [
-        "<Esc>"
-      ]
-    },
-    {
-      "before": [
-        "j",
-        "j"
-      ],
-      "after": [
-        "<Esc>"
-      ]
-    }
-  ],
-  "geminicodeassist.project": "polished-foundry-4dpsm",
-  "diffEditor.codeLens": true,
-  "explorer.confirmDelete": false,
-  "http.systemCertificatesNode": true,
-  "explorer.confirmDragAndDrop": false,
-  "gitlens.ai.gitkraken.model": "gemini:gemini-2.0-flash",
-  "bracketPairColorizer.depreciation-notice": false,
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "editor.defaultFormatter": "esbenp.prettier-vscode"
+	"relative_line_numbers": "enabled",
+ "cli_default_open_behavior": "existing_window",
+ "agent_servers": {
+		"claude-acp": {
+			"default_config_options": {
+				"mode": "auto"
+			},
+			"type": "registry"
+		}
+	},
+	"soft_wrap": "editor_width",
+	"edit_predictions": {
+		"mode": "subtle"
+	},
+	"vim": {
+		"cursor_shape": {
+			"normal": "hollow"
+		}
+	},
+	"cursor_shape": "underline",
+	"lsp": {
+		"vtsls": {
+			"settings": {
+				"typescript": {
+					"updateImportsOnFileMove": {
+						"enabled": "always"
+					}
+				},
+				"javascript": {
+					"updateImportsOnFileMove": {
+						"enabled": "always"
+					}
+				}
+			},
+			"enable_lsp_tasks": true
+		}
+	},
+	"format_on_save": "on",
+
+	"languages": {
+		"JavaScript": {
+			"formatter": { "language_server": { "name": "biome" } },
+			"code_actions_on_format": {
+				"source.organizeImports.biome": true
+			}
+		},
+		"JSX": {
+			"formatter": { "language_server": { "name": "biome" } },
+			"code_actions_on_format": {
+				"source.organizeImports.biome": true
+			}
+		},
+		"TypeScript": {
+			"formatter": { "language_server": { "name": "biome" } },
+			"code_actions_on_format": {
+				"source.organizeImports.biome": true
+			}
+		},
+		"TSX": {
+			"formatter": { "language_server": { "name": "biome" } },
+			"code_actions_on_format": {
+				"source.organizeImports.biome": true
+			}
+		},
+		"JSON": {
+			"formatter": { "language_server": { "name": "biome" } }
+		},
+		"JSONC": {
+			"formatter": { "language_server": { "name": "biome" } }
+		}
+	},
+
+	"git_panel": {
+		"group_by": "none",
+  "tree_view": true,
+  "entry_primary_click_action": "file_diff",
+  "dock": "left"
+	},
+	"agent": {
+		"default_model": {
+			"provider": "anthropic",
+			"model": "claude-sonnet-5",
+			"enable_thinking": true,
+			"effort": "high"
+		},
+		"play_sound_when_agent_done": "always",
+		"thinking_display": "always_collapsed",
+		"use_modifier_to_send": true,
+		"dock": "right",
+		"sidebar_side": "right",
+		"favorite_models": [],
+		"model_parameters": []
+	},
+	"icon_theme": "Catppuccin Macchiato",
+	"project_panel": {
+		"dock": "left"
+	},
+	"session": {
+		"trust_all_worktrees": true
+	},
+	"vim_mode": true,
+	"minimap": {
+		"show": "always"
+	},
+	"base_keymap": "VSCode",
+	"ui_font_size": 16,
+	"buffer_font_size": 15,
+	"theme": {
+		"mode": "dark",
+		"light": "Everforest Light Hard (regular)",
+		"dark": "Min Dark (Solid)"
+	}
 }

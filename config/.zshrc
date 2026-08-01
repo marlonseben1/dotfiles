@@ -88,23 +88,32 @@ get_chave() {
     echo "$doc_name: $chave"
 }
 
-# ---- SYNC WORK ACTIVITY LOG ----#
+# ---- SYNC GITLAB ACTIVITY ----#
 
 sync() {
+    local ENV_FILE="$HOME/.config/fedora-setup.env"
+    [[ -f "$ENV_FILE" ]] && source "$ENV_FILE"
+
+    if [[ -z "$SYNC_EMAIL_PERSONAL" || -z "$SYNC_EMAIL_WORK" || -z "$SYNC_SOURCE_REPO" || -z "$SYNC_LOG_REPO" ]]; then
+        echo "sync: defina SYNC_EMAIL_PERSONAL, SYNC_EMAIL_WORK, SYNC_SOURCE_REPO e SYNC_LOG_REPO em $ENV_FILE"
+        echo "(veja config/fedora-setup.env.example no dotfiles)"
+        return 1
+    fi
+
     local DATE="${1:-$(date '+%Y-%m-%d')}"
     local SINCE="${DATE}T07:00:00"
     local UNTIL="${DATE}T23:59:59"
 
-    cd ~/Projetos/simplescte
+    cd "$SYNC_SOURCE_REPO"
     git fetch --all -q
 
     local NEW_DATES=$(git log --all --format="%aI" \
       --after="$SINCE" --before="$UNTIL" \
-      --author="marlonseben1@gmail.com" \
-      --author="you@company.com" \
+      --author="$SYNC_EMAIL_PERSONAL" \
+      --author="$SYNC_EMAIL_WORK" \
       | sort -u)
 
-    cd ~/Projetos/work-activity-log
+    cd "$SYNC_LOG_REPO"
     local EXISTING=$(git log --format="%aI" | sort -u)
 
     local TO_CREATE=$(comm -23 <(echo "$NEW_DATES") <(echo "$EXISTING"))
@@ -124,8 +133,6 @@ sync() {
 }
 
 #-------------ALIASES-------------#|
-alias ag='antigravity'			  #|
-alias ws='windsurf'               #|
 alias c="claude"                  #|
 #---------------------------------#|
 alias gpl='git pull'              #|
@@ -155,7 +162,7 @@ alias killport≃'fuser -k'         #|
 export PATH="$HOME/.local/bin:$PATH"
 
 # bun completions
-[ -s "/home/marlonseben/.bun/_bun" ] && source "/home/marlonseben/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
