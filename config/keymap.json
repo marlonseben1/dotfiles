@@ -1,15 +1,32 @@
 [
-  {
-    "context": "Workspace",
-    "bindings": {
-    }
-  },
-  {
-    "context": "Editor && vim_mode == insert",
-    "bindings": {
-     "j k": "vim::NormalBefore",
+	{
+		"context": "Workspace",
+		"bindings": {
+			"shift shift": "file_finder::Toggle"
+		}
+	},
+	{
+		"context": "Editor && vim_mode == insert",
+		"bindings": {
+			"j k": "vim::NormalBefore",
 
-     "j j": "vim::NormalBefore"
-    }
-  }
+			"j j": "vim::NormalBefore"
+		}
+	},
+	{
+		"context": "VimControl && !menu",
+		"bindings": {
+			"w": "vim::NextSubwordStart",
+			"b": "vim::PreviousSubwordStart",
+			"e": "vim::NextSubwordEnd",
+			"g e": "vim::PreviousSubwordEnd"
+		}
+	},
+	{
+		"context": "Editor && (showing_code_actions || showing_completions)",
+		"bindings": {
+			"ctrl-j": "editor::ContextMenuNext",
+			"ctrl-k": "editor::ContextMenuPrevious"
+		}
+	}
 ]

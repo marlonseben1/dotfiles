@@ -94,8 +94,8 @@ sync() {
     local ENV_FILE="$HOME/.config/fedora-setup.env"
     [[ -f "$ENV_FILE" ]] && source "$ENV_FILE"
 
-    if [[ -z "$SYNC_EMAIL_PERSONAL" || -z "$SYNC_EMAIL_WORK" || -z "$SYNC_SOURCE_REPO" || -z "$SYNC_LOG_REPO" ]]; then
-        echo "sync: defina SYNC_EMAIL_PERSONAL, SYNC_EMAIL_WORK, SYNC_SOURCE_REPO e SYNC_LOG_REPO em $ENV_FILE"
+    if [[ -z "$SYNC_EMAIL_PERSONAL" || -z "$SYNC_EMAIL_WORK" || ${#SYNC_SOURCE_REPOS[@]} -eq 0 || -z "$SYNC_LOG_REPO" ]]; then
+        echo "sync: defina SYNC_EMAIL_PERSONAL, SYNC_EMAIL_WORK, SYNC_SOURCE_REPOS e SYNC_LOG_REPO em $ENV_FILE"
         echo "(veja config/fedora-setup.env.example no dotfiles)"
         return 1
     fi
@@ -104,14 +104,17 @@ sync() {
     local SINCE="${DATE}T07:00:00"
     local UNTIL="${DATE}T23:59:59"
 
-    cd "$SYNC_SOURCE_REPO"
-    git fetch --all -q
-
-    local NEW_DATES=$(git log --all --format="%aI" \
-      --after="$SINCE" --before="$UNTIL" \
-      --author="$SYNC_EMAIL_PERSONAL" \
-      --author="$SYNC_EMAIL_WORK" \
-      | sort -u)
+    local NEW_DATES=""
+    local repo
+    for repo in "${SYNC_SOURCE_REPOS[@]}"; do
+        cd "$repo"
+        git fetch --all -q
+        NEW_DATES+=$'\n'"$(git log --all --format="%aI" \
+          --after="$SINCE" --before="$UNTIL" \
+          --author="$SYNC_EMAIL_PERSONAL" \
+          --author="$SYNC_EMAIL_WORK")"
+    done
+    NEW_DATES=$(echo "$NEW_DATES" | sed '/^$/d' | sort -u)
 
     cd "$SYNC_LOG_REPO"
     local EXISTING=$(git log --format="%aI" | sort -u)
@@ -132,9 +135,10 @@ sync() {
     echo "Done: $(echo "$TO_CREATE" | wc -l) commits adicionados."
 }
 
-#-------------ALIASES-------------#|
+# ---- ALIASES ----#
+
+#---------------START-------------#|
 alias c="claude"                  #|
-#---------------------------------#|
 alias gpl='git pull'              #|
 alias gc='git checkout'           #|
 alias gs='git status'             #|
@@ -147,15 +151,12 @@ alias gml='git merge -'           #|
 alias gstm='git stash -u -m'      #|
 alias gsp='git stash -pop'        #|
 alias gsl='git stash list'        #|
-#---------------------------------#|
 alias pi='pnpm install'           #|
 alias ptb='pnpm tsc --build'      #|
 alias pdev='pnpm run dev'         #|
-#---------------------------------#|
 alias ba='bun add'                #|
 alias bi='bun install'            #|
 alias bdev='bun run dev'          #|
-#---------------------------------#|
 alias killport≃'fuser -k'         #|
 #---------------END---------------#|
 

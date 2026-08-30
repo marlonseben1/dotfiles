@@ -2,24 +2,30 @@
 
 DOTFILES_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 
+TOTAL_STEPS=10
+step() {
+    echo ""
+    echo "[$1/$TOTAL_STEPS] $2"
+}
+
 echo " --- Starting the setup --- "
 
-# 1. Installing base packages
+step 1 "Installing base packages"
 sudo dnf upgrade -y
 sudo dnf install -y git zsh util-linux-user curl
 
-# 2. Setting Zsh as the default terminal
+step 2 "Setting Zsh as the default terminal"
 sudo chsh -s $(which zsh) $USER
 
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
-# 3. Installing pnpm
+step 3 "Installing pnpm"
 
 curl -fsSL https://get.pnpm.io/install.sh | sh -
 
-# 4. Linking configuration files for Zsh
+step 4 "Linking configuration files for Zsh"
 
 ln -sf "$DOTFILES_DIR/config/.zshrc" "$HOME/.zshrc"
 
@@ -31,16 +37,16 @@ if [ ! -f "$HOME/.config/fedora-setup.env" ]; then
     echo "Created ~/.config/fedora-setup.env — fill it in with your real emails/repo paths before using the 'sync' command."
 fi
 
-# 5. Installing Node and TypeScript globally
+step 5 "Installing Node and TypeScript globally"
 export PATH="$HOME/.local/share/pnpm:$PATH"
 PNPM_BIN="$HOME/.local/share/pnpm/pnpm"
 $PNPM_BIN env use --global lts
 $PNPM_BIN add -g typescript
 
-# 6. Idiom setup (English)
+step 6 "Idiom setup (English)"
 sudo localectl set-locale LANG=en_US.UTF-8
 
-# 7. Installing and setting up Zed
+step 7 "Installing and setting up Zed"
 
 curl -f https://zed.dev/install.sh | sh
 
@@ -49,14 +55,14 @@ mkdir -p "$ZED_CONFIG_DIR"
 ln -sf "$DOTFILES_DIR/config/settings.json" "$ZED_CONFIG_DIR/settings.json"
 ln -sf "$DOTFILES_DIR/config/keymap.json" "$ZED_CONFIG_DIR/keymap.json"
 
-# 8. Installing SF Pro Font
+step 8 "Installing SF Pro Font"
 if [ -d "$DOTFILES_DIR/fonts" ]; then
     mkdir -p ~/.local/share/fonts
     cp -r "$DOTFILES_DIR/fonts/"* ~/.local/share/fonts/
     fc-cache -f
 fi
 
-# 9. Setting up the theme I am currently using (I still do a few tweaks manually here)
+step 9 "Setting up the theme I am currently using (I still do a few tweaks manually here)"
 sudo dnf install -y sassc optipng inkscape
 
 git clone https://github.com/vinceliuice/WhiteSur-kde.git /tmp/WhiteSur-kde
@@ -67,7 +73,7 @@ lookandfeeltool -a com.github.vinceliuice.WhiteSur-dark
 git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icons
 /tmp/WhiteSur-icons/install.sh -a
 
-# 10. Custom KDE global shortcuts (window management)
+step 10 "Custom KDE global shortcuts (window management)"
 KGLOBALSHORTCUTS="$HOME/.config/kglobalshortcutsrc"
 KWINRC="$HOME/.config/kwinrc"
 
