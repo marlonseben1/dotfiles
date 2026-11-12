@@ -1,32 +1,54 @@
 [
-	{
-		"context": "Workspace",
-		"bindings": {
-			"shift shift": "file_finder::Toggle"
-		}
-	},
-	{
-		"context": "Editor && vim_mode == insert",
-		"bindings": {
-			"j k": "vim::NormalBefore",
-
-			"j j": "vim::NormalBefore"
-		}
-	},
-	{
-		"context": "VimControl && !menu",
-		"bindings": {
-			"w": "vim::NextSubwordStart",
-			"b": "vim::PreviousSubwordStart",
-			"e": "vim::NextSubwordEnd",
-			"g e": "vim::PreviousSubwordEnd"
-		}
-	},
-	{
-		"context": "Editor && (showing_code_actions || showing_completions)",
-		"bindings": {
-			"ctrl-j": "editor::ContextMenuNext",
-			"ctrl-k": "editor::ContextMenuPrevious"
-		}
-	}
+  {
+    "context": "Workspace",
+    "bindings": {
+      "shift shift": "file_finder::Toggle",
+      "ctrl-w": "git::Worktree"
+    }
+  },
+  {
+    "context": "Picker",
+    "bindings": {
+      "ctrl-j": "menu::SelectNext",
+      "ctrl-k": "menu::SelectPrevious"
+    }
+  },
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      "j k": "vim::NormalBefore",
+      "j j": "vim::NormalBefore"
+    }
+  },
+  {
+    "context": "VimControl && !menu",
+    "bindings": {
+      "w": "vim::NextSubwordStart",
+      "b": "vim::PreviousSubwordStart",
+      "e": "vim::NextSubwordEnd",
+      "g e": "vim::PreviousSubwordEnd"
+    }
+  },
+  {
+    "context": "Editor && (showing_code_actions || showing_completions)",
+    "bindings": {
+      "ctrl-j": "editor::ContextMenuNext",
+      "ctrl-k": "editor::ContextMenuPrevious"
+    }
+  },
+  {
+    "context": "Editor && mode == full",
+    "unbind": {
+      "ctrl->": "agent::AddSelectionToThread"
+    },
+    "bindings": {
+      "ctrl-shift-c": "agent::AddSelectionToThread"
+    }
+  },
+  {
+    "context": "!Terminal",
+    "unbind": {
+      "ctrl-shift-c": "collab_panel::ToggleFocus"
+    }
+  }
 ]
